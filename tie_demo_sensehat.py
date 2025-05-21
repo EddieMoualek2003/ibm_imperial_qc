@@ -1,42 +1,66 @@
-
-
-def display_bitstring_on_sensehat(hat, bitstring):
+def display_bitstring_on_sensehat(hat, bitstring, layout='tee'):
     """
-    Display a quantum bitstring on a SenseHat 8x8 LED matrix in a T layout.
-    '1' is blue, '0' is red, unused qubits are purple.
-    """
+    Displays a 5-qubit bitstring on the Sense HAT emulator in either 'tee' or 'bowtie' layout.
 
-    # Initialize SenseHat
-    
+    Args:
+        bitstring (str): e.g. '10101'
+        layout (str): 'tee' (default) or 'bowtie'
+    """
     hat.clear()
 
-    # Define RGB colors
-    RED = [255, 0, 0]
-    BLUE = [0, 0, 255]
+    # Define color codes
+    RED    = [255, 0, 0]
+    BLUE   = [0, 0, 255]
     PURPLE = [128, 0, 128]
-    OFF = [0, 0, 0]
+    OFF    = [0, 0, 0]
 
-    # T-shaped layout for up to 5 qubits (bit index to LED positions)
-    qubit_pixel_map = [
-        [0, 1, 8, 9],       # qubit 0
-        [3, 4, 11, 12],     # qubit 1
-        [6, 7, 14, 15],     # qubit 2
-        [27, 28, 35, 36],   # qubit 3
-        [51, 52, 59, 60]    # qubit 4
+    # Define layout mappings
+    tee_map = [
+        [0, 1, 8, 9],        # Q0
+        [3, 4, 11, 12],      # Q1
+        [6, 7, 14, 15],      # Q2
+        [27, 28, 35, 36],    # Q3
+        [51, 52, 59, 60]     # Q4
     ]
 
-    # Initialize all 64 pixels to OFF
+    bowtie_map = [
+        [6, 7, 14, 15],    # Q0 - top right
+        [54, 55, 62, 63],    # Q1 - bottom right
+        [27, 28, 35, 36],    # Q2 - center
+        [48, 49, 56, 57],    # Q3 - bottom left
+        [0, 1, 8, 9]     # Q4 - top left
+    ]
+
+    hex_map = [
+        [3],    # Q0
+        [10],   # Q1
+        [12],   # Q2
+        [17],   # Q3
+        [21],   # Q4
+        [24],   # Q5
+        [30],   # Q6
+        [33],   # Q7
+        [37],   # Q8
+        [42],   # Q9
+        [44],   # Q10
+        [51]    # Q11
+    ]
+
+    if layout == "T":
+        layout_map = tee_map
+    elif layout == "B":
+        layout_map = bowtie_map
+    elif layout == "H":
+        layout_map = hex_map
+
+    # Prepare pixel grid
     pixels = [OFF[:] for _ in range(64)]
 
-    for i in range(len(qubit_pixel_map)):
-        color = PURPLE  # Default for overflow/unassigned
+    for i in range(len(layout_map)):
+        color = PURPLE  # default for unused or overflow
         if i < len(bitstring):
-            if bitstring[i] == '1':
-                color = BLUE
-            elif bitstring[i] == '0':
-                color = RED
-        for pixel_index in qubit_pixel_map[i]:
-            pixels[pixel_index] = color
+            color = BLUE if bitstring[i] == '1' else RED
+        for idx in layout_map[i]:
+            pixels[idx] = color
 
-    # Update SenseHat display
     hat.set_pixels(pixels)
