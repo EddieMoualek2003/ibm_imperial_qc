@@ -1,28 +1,74 @@
-def display_bitstring_on_sensehat(hat, bitstring):
+import time
+
+def visualize_solution_on_sensehat(hat, initial_grid, bitstring_solution, delay=1.0):
     """
-    Displays a 9-bit solution bitstring (e.g. '101001101') on the Sense HAT LED matrix.
-    Layout is centered in the 8x8 grid.
+    Visualizes the Lights Out solution on the Sense HAT LED matrix.
+    Displays initial grid, animates presses, and shows final state.
 
     Args:
-        bitstring (str): A string of 9 binary digits representing on/off states
-                         corresponding to the lights-out grid solution.
+        initial_grid (list of int): List of 9 binary values representing lights ON/OFF.
+        bitstring_solution (str): 9-bit string from quantum circuit (e.g., '101000010').
+        delay (float): Time to wait between animation steps in seconds.
     """
 
-    # Define color codes
-    ON_COLOR = (0, 0, 255)       # Blue
-    OFF_COLOR = (20, 20, 20)     # Dim grey
+    # Setup
+    sense = hat
+    sense.clear()
 
-    # LED grid index mapping (Centered 3x3 grid on 8x8 matrix)
+    # Color definitions
+    ON_COLOR = (0, 0, 255)       # Blue
+    OFF_COLOR = (20, 20, 20)     # Grey
+    PRESS_COLOR = (255, 0, 0)    # Red
+
+    # Grid layout mapping to center 3x3 on Sense HAT
     index_map = [
         (2, 2), (2, 3), (2, 4),
         (3, 2), (3, 3), (3, 4),
         (4, 2), (4, 3), (4, 4)
     ]
 
-    # hat = SenseHat()
-    hat.clear()
+    # Copy grid
+    grid = initial_grid.copy()
 
-    for i, bit in enumerate(bitstring):
-        x, y = index_map[i]
-        color = ON_COLOR if bit == '1' else OFF_COLOR
-        hat.set_pixel(x, y, color)
+    # Helper to display current state
+    def display_grid(active_index=None):
+        for i, val in enumerate(grid):
+            x, y = index_map[i]
+            if i == active_index:
+                color = PRESS_COLOR
+            else:
+                color = ON_COLOR if val == 1 else OFF_COLOR
+            sense.set_pixel(x, y, color)
+
+    # Helper to toggle value
+    def switch(val): return 0 if val == 1 else 1
+
+    # Initial display
+    display_grid()
+    time.sleep(delay)
+
+    # Execute each press step
+    for i, bit in enumerate(bitstring_solution):
+        if bit == '1':
+            # Highlight the press
+            display_grid(active_index=i)
+            time.sleep(delay)
+
+            # Toggle self and neighbors
+            grid[i] = switch(grid[i])
+            neighbors = []
+
+            if i - 3 >= 0: neighbors.append(i - 3)   # above
+            if i + 3 < 9:  neighbors.append(i + 3)   # below
+            if i % 3 != 0: neighbors.append(i - 1)   # left
+            if i % 3 != 2: neighbors.append(i + 1)   # right
+
+            for j in neighbors:
+                grid[j] = switch(grid[j])
+
+            # Display updated grid
+            display_grid()
+            time.sleep(delay)
+
+    # Final state
+    display_grid()
