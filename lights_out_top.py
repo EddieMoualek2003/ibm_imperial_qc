@@ -9,7 +9,7 @@ import time
 from random import choice
 
 ## Modulation of "lights_out" Functions for Improved Readability.
-from lights_out import lights_out_consants
+import lights_out_consants
 from lights_out_func import *
 
 ## Array containing the initial lights out grid values
