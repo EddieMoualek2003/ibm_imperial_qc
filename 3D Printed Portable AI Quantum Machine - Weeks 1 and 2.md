@@ -64,7 +64,7 @@ This project aims to develop a **3D Printed Portable AI Quantum Machine** - a Ra
 - [Granite for Software Development](https://skills.yourlearning.ibm.com/activity/MDL-567)
 - [Learning Journal / RAG Analysis](https://docs.google.com/spreadsheets/d/1sF9Oc2OouF73Z6AvovJ69b6G2dEbBKRIfdPd3dAS7XI/edit?usp=sharing)
 - [Jira Board](https://team9ibmquantum.atlassian.net/jira/software/projects/SCRUM/list?filter=updatedDate+%3E%3D+-1w&atlOrigin=eyJpIjoiZmNlMzgzNWFkNThjNDMzYjk1MmUwMTAzNDE0OGI2MWEiLCJwIjoiaiJ9)
-- [GitHub Repo](https://github.com/NightRaven3142/Team9-IBMQuantumAIMachine/tree/main)
+- [GitHub Repo](https://github.com/EddieMoualek2003/ibm_imperial_qc/tree/main)
 - [Video Update (Week 1–2)](https://github.com/NightRaven3142/Team9-IBMQuantumAIMachine/tree/main)
 
 ---
