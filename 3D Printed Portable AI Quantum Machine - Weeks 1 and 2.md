@@ -65,7 +65,7 @@ This project aims to develop a **3D Printed Portable AI Quantum Machine** - a Ra
 - [Learning Journal / RAG Analysis](https://docs.google.com/spreadsheets/d/1sF9Oc2OouF73Z6AvovJ69b6G2dEbBKRIfdPd3dAS7XI/edit?usp=sharing)
 - [Jira Board](https://team9ibmquantum.atlassian.net/jira/software/projects/SCRUM/list?filter=updatedDate+%3E%3D+-1w&atlOrigin=eyJpIjoiZmNlMzgzNWFkNThjNDMzYjk1MmUwMTAzNDE0OGI2MWEiLCJwIjoiaiJ9)
 - [GitHub Repo](https://github.com/EddieMoualek2003/ibm_imperial_qc/tree/main)
-- [Video Update (Week 1–2)](https://github.com/NightRaven3142/Team9-IBMQuantumAIMachine/tree/main)
+- [Video Update (Week 1–2)](https://imperiallondon-my.sharepoint.com/:v:/g/personal/em621_ic_ac_uk/EStcHVfnU3JHhBwH16IgkoMBvaIAYBhszkZsUtsTFaHxIQ?e=Pw2w7v&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D)
 
 ---
 
