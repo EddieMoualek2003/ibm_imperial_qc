@@ -4,7 +4,7 @@ import time
 import numpy as np
 from sense_emu import SenseHat
 
-def main():
+def tie_demo_main():
     hat = SenseHat()
     gameMode = 1
     while True:
@@ -33,6 +33,4 @@ def main():
             gameMode = 0
             print("Now get out...")
 
-if __name__ == "__main__":
-    main()
 

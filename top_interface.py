@@ -1,19 +1,22 @@
-# import os
-# import sys
-
-# # Step 1: Automatically add the parent directory to sys.path
-# # This allows absolute imports to work
-# current_dir = os.path.dirname(os.path.abspath(__file__))
-# project_root = os.path.dirname(current_dir)
-
-# if project_root not in sys.path:
-#     sys.path.insert(1, project_root)
-
-# # Step 2: Now do the absolute import
-# from IBM_QC_Integrated_Platform.lights_out.lights_out_top import lights_out_main
-
 from lights_out_top import *
+from tie_demo_top import *
+from dice_game_top import *
+
+
+gameArray = [
+    ["Option 1 - Lights Out", lights_out_main],
+    ["Option 2 - Tie Demo", tie_demo_main],
+    ["Option 3 - Schrodinger Dice Game", dice_game_main],
+    ["Option 4 - Zeno Measurement Impact"]
+]
+
 
 # Step 3: Main entry
 if __name__ == "__main__":
-    lights_out_main()
+    for game in gameArray:
+        print(f"\t\t {game[0]}")
+    try:
+        choice = int(input("Enter a game option: "))
+        gameArray[choice-1][1]()
+    except:
+        print("Invalid Option")

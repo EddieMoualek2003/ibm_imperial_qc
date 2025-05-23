@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-
 def createCircuit():
     qc = QuantumCircuit(3)
     qc.h([0, 1, 2])  # Put all qubits into superposition
@@ -86,4 +85,4 @@ def createAnimation(measured_state):
     ani = animation.FuncAnimation(fig, animate, frames=frames, interval=100, blit=False)
 
     plt.close()
-    ani.save('schrodinger_dice_wavefunction_collapse.gif', writer='ffmpeg', fps=10)
+    ani.save('resource_folder/schrodinger_dice_wavefunction_collapse.gif', writer='ffmpeg', fps=10)
