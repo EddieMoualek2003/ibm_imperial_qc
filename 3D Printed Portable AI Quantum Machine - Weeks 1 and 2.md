@@ -13,7 +13,7 @@ This project aims to develop a **3D Printed Portable AI Quantum Machine** - a Ra
 - Registered for IBM SkillsBuild and created the IBM Cloud account
 - Initiated core AI learning pathway:
   - [Getting Started with AI](https://www.credly.com/badges/e693dfd6-4c73-472f-9917-c46db637d4d4/public_url)
-  - [Granite for Software Development](https://skills.yourlearning.ibm.com/activity/MDL-567)
+  - [Granite for Software Development](https://skills.yourlearning.ibm.com/certificate/share/26d018a089ewogICJvYmplY3RJZCIgOiAiTURMLTU2NyIsCiAgIm9iamVjdFR5cGUiIDogIkFDVElWSVRZIiwKICAibGVhcm5lckNOVU0iIDogIjQ2NDY3MDlSRUciCn0cddba6c263-10)
 - Reviewed access requirements and constraints for Watsonx Assistant and identified platform limitations with the standard tier
 
 ### 2. **Qiskit Demo Migration and Compatibility Work**
@@ -61,7 +61,7 @@ This project aims to develop a **3D Printed Portable AI Quantum Machine** - a Ra
 ## Certifications & Resources
 
 - [IBM SkillsBuild AI Pathway](https://www.credly.com/badges/e693dfd6-4c73-472f-9917-c46db637d4d4/public_url)
-- [Granite for Software Development](https://skills.yourlearning.ibm.com/activity/MDL-567)
+- [Granite for Software Development](https://skills.yourlearning.ibm.com/certificate/share/26d018a089ewogICJvYmplY3RJZCIgOiAiTURMLTU2NyIsCiAgIm9iamVjdFR5cGUiIDogIkFDVElWSVRZIiwKICAibGVhcm5lckNOVU0iIDogIjQ2NDY3MDlSRUciCn0cddba6c263-10)
 - [Learning Journal / RAG Analysis](https://docs.google.com/spreadsheets/d/1sF9Oc2OouF73Z6AvovJ69b6G2dEbBKRIfdPd3dAS7XI/edit?usp=sharing)
 - [Jira Board](https://team9ibmquantum.atlassian.net/jira/software/projects/SCRUM/list?filter=updatedDate+%3E%3D+-1w&atlOrigin=eyJpIjoiZmNlMzgzNWFkNThjNDMzYjk1MmUwMTAzNDE0OGI2MWEiLCJwIjoiaiJ9)
 - [GitHub Repo](https://github.com/EddieMoualek2003/ibm_imperial_qc/tree/main)
