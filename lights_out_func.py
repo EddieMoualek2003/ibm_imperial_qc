@@ -160,7 +160,7 @@ def compute_quantum_solution(lights):
     # Make the Out put order the same as the input.
     qc = qc.reverse_bits()
     result = ibm_qc_interface.quantum_execute(simulator=1, circuit=qc)
-    results_dict = result[0].data.c0.get_counts()
+    results_dict = result
     score_sorted = sorted(results_dict.items(), key=lambda x: x[1], reverse=True)
     final_score = score_sorted[0:40]
     quantum_solution = final_score[0][0]
