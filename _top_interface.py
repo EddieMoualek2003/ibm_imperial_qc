@@ -1,13 +1,13 @@
 from lights_out_top import *
 from tie_demo_top import *
 from dice_game_top import *
-
+from zeno_demo_top import *
 
 gameArray = [
     ["Option 1 - Lights Out", lights_out_main],
     ["Option 2 - Tie Demo", tie_demo_main],
     ["Option 3 - Schrodinger Dice Game", dice_game_main],
-    ["Option 4 - Zeno Measurement Impact"]
+    ["Option 4 - Zeno Measurement Impact", zeno_demo_main]
 ]
 
 

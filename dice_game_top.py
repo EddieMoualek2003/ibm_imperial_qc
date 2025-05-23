@@ -11,5 +11,3 @@ def dice_game_main():
     selected = returnSelectedState(counts)
     createAnimation(selected)
     return counts
-
-print(dice_game_main())
