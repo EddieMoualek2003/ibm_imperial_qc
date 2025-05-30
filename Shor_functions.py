@@ -48,7 +48,7 @@ def create_quantum_circuit(n_count, m_target):
 
 def measure(qc):
     # Run simulation
-    counts = noisy_simulator(qc, 8192)
+    counts = noisy_simulator(qc)
     return counts
 
 def result_clean_convert(counts):

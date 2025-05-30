@@ -89,7 +89,8 @@ def rank_scores():
     qc = readCircuit()
 
     # Run the circuit: 1 = use simulator, 0 = use real backend
-    result = ibm_qc_interface.quantum_execute(simulator=1, circuit=qc)
+    # result = ibm_qc_interface.quantum_execute(simulator=1, circuit=qc)
+    result = ibm_qc_interface.noisy_simulator(qc) 
     best = max(result, key = result.get)
     score_sorted = sorted(result.items(), key=lambda x: x[1], reverse=False)
     # return f"The best score is {best} and the rest of the results for comparison are {score_sorted}"

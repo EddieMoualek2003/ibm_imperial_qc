@@ -9,7 +9,6 @@ from qiskit import QuantumCircuit, transpile
 from qiskit.visualization import plot_histogram
 from qiskit.primitives import StatevectorSampler
 
-
 def ibm_account_connect():
     token = "4Ke_JAy6uepzHTBV9fSDjGbFrSse7VYWwRgHJULxx34q"
     instance = "crn:v1:bluemix:public:quantum-computing:us-east:a/737dfb0b1e374ec7a5772fdbcece5643:a48276b9-a41b-449c-8d76-d2adf66ea9d4::"
@@ -32,7 +31,7 @@ def quantum_execute(simulator, circuit):
     qc = circuit
 
     if simulator:
-        print("Simulator Mode")
+        # print("Simulator Mode")
         ## Run on the simulator.
         sampler = StatevectorSampler()
         pm = generate_preset_pass_manager(optimization_level=1)
@@ -49,13 +48,13 @@ def quantum_execute(simulator, circuit):
 
     ## Transpilation of the current circuit.
     isa_circuit = pm.run(qc)
-    isa_circuit.draw("mpl", idle_wires=False)
-    print("Circuit Transpiled")
-    print("Job Queued")
+    # isa_circuit.draw("mpl", idle_wires=False)
+    # print("Circuit Transpiled")
+    # print("Job Queued")
     ## Run the job on the quantum computer
     job = sampler.run([isa_circuit])
     pub_result = job.result()
-    print("Job Complete")
+    # print("Job Complete")
 
     return pub_result[0].data.c0.get_counts() # pub_result.data.meas.get_counts()
 
@@ -65,7 +64,7 @@ def quantum_execute_evolved(simulator, circuit):
     qc = circuit
 
     if simulator:
-        print("Simulator Mode")
+        # print("Simulator Mode")
         ## Run on the simulator.
         sampler = StatevectorSampler()
         pm = generate_preset_pass_manager(optimization_level=1)
@@ -82,8 +81,8 @@ def quantum_execute_evolved(simulator, circuit):
 
     ## Transpilation of the current circuit.
     isa_circuit = pm.run(qc)
-    isa_circuit.draw("mpl", idle_wires=False)
-    print("Circuit Transpiled")
+    # isa_circuit.draw("mpl", idle_wires=False)
+    # print("Circuit Transpiled")
 
     ## Run the job on the quantum computer
     job = sampler.run([(isa_circuit)])
@@ -91,7 +90,7 @@ def quantum_execute_evolved(simulator, circuit):
 
     return pub_result.data.meas.get_counts()
 
-def noisy_simulator(qc, shots):
+def noisy_simulator(qc):
     # Use fake noisy backend
     fake_backend = FakeManilaV2()
     noise_model = NoiseModel.from_backend(fake_backend)
@@ -99,9 +98,9 @@ def noisy_simulator(qc, shots):
 
     # Transpile circuit
     qc_t = transpile(qc, simulator)
-
     # Run simulation
-    job = simulator.run(qc_t, shots=8192)
+    job = simulator.run(qc_t, shots=1024)
     result = job.result()
     counts = result.get_counts()
     return counts
+

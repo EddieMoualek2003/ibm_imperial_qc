@@ -3,7 +3,7 @@ import argparse
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, transpile
 
 ## IBM Quantum Computer Interface Module Import
-import ibm_qc_interface
+from ibm_qc_interface import *
 
 def map_board(lights, qc, qr):
     j = 0
@@ -159,7 +159,10 @@ def compute_quantum_solution(lights):
 
     # Make the Out put order the same as the input.
     qc = qc.reverse_bits()
-    result = ibm_qc_interface.quantum_execute(simulator=1, circuit=qc)
+    print("Running")
+    # result = noisy_simulator(qc)
+    result = quantum_execute(simulator=1, circuit=qc)
+    print("Completed")
     results_dict = result
     score_sorted = sorted(results_dict.items(), key=lambda x: x[1], reverse=True)
     final_score = score_sorted[0:40]
