@@ -1,7 +1,6 @@
 import subprocess
 import threading
 import time
-from pynput import keyboard as pynput_keyboard
 
 from lights_out.lights_out_top import *
 from dice_game.dice_game_top import *
@@ -21,33 +20,30 @@ def debug_main():
     choice = int(input("Enter a game option: "))
     gameArray[choice-1][1]()
 
-def run_with_hotkey():
+def run_with_quit_input():
     stop_event = threading.Event()
 
-    # Start the ESC key listener in a separate thread
-    def on_press(key):
-        if key == pynput_keyboard.Key.esc:
-            print("Key Press Detected")
-            stop_event.set()
-            return False  # Stop the listener
+    # Launch a background thread to listen for ENTER key
+    def wait_for_enter():
+        input("\n📎 Press ENTER at any time to stop and return to the main menu...\n")
+        stop_event.set()
 
-    listener = pynput_keyboard.Listener(on_press=on_press)
-    listener.start()
+    threading.Thread(target=wait_for_enter, daemon=True).start()
 
-    # Run the main loop (blocks until stop_event is set)
+    # Run the game menu loop
     main_loop(stop_event)
 
-    # Wait for listener to finish before exiting
-    listener.join()
-
 def main_loop(stop_event):
-    print("Press 'ESC' to come back to the main menu when done")
+    print("🎮 Available Quantum Demos:")
     for game in gameArray:
-        print(f"\t\t {game[0]}")
-    choice = int(input("Enter a game option: "))
+        print(f"\t{game[0]}")
 
-    while not stop_event.is_set():
-        gameArray[choice-1][1]()
+    try:
+        choice = int(input("\nEnter a game option: "))
+        while not stop_event.is_set():
+            gameArray[choice - 1][1]()
+    except (IndexError, ValueError):
+        print("❌ Invalid selection. Please enter a number from the menu.")
 
 if __name__ == "__main__":
-    run_with_hotkey()
+    run_with_quit_input()
