@@ -27,6 +27,7 @@ def run_with_hotkey():
     # Start the ESC key listener in a separate thread
     def on_press(key):
         if key == pynput_keyboard.Key.esc:
+            print("Key Press Detected")
             stop_event.set()
             return False  # Stop the listener
 
