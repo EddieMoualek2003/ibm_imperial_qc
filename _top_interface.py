@@ -27,10 +27,7 @@ if __name__ == "__main__":
         # debug_main()
         for game in gameArray:
             print(f"\t\t {game[0]}")
-        try:
-            choice = int(input("Enter a game option: "))
-            gameArray[choice-1][1]()
-        except:
-            print("Invalid Option")
+        choice = int(input("Enter a game option: "))
+        gameArray[choice-1][1]()
 
 #comments
