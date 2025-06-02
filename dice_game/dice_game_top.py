@@ -1,5 +1,5 @@
-from dice_game_functions import *
-from ibm_qc_interface import *
+from dice_game.dice_game_functions import *
+from utils.ibm_qc_interface import *
 
 
 def dice_game_main():
