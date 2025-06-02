@@ -1,5 +1,9 @@
 import subprocess
 import threading
+import sys
+import termios
+import tty
+import select
 import time
 
 from lights_out.lights_out_top import *
@@ -16,21 +20,26 @@ gameArray = [
     ["Option 4 - Zeno Measurement Impact", zeno_demo_main]
 ]
 
-def debug_main():
-    choice = int(input("Enter a game option: "))
-    gameArray[choice-1][1]()
-
-def run_with_quit_input():
+def run_with_esc_hotkey():
     stop_event = threading.Event()
 
-    # Launch a background thread to listen for ENTER key
-    def wait_for_enter():
-        input("\n📎 Press ENTER at any time to stop and return to the main menu...\n")
-        stop_event.set()
+    # Background thread to watch for ESC
+    def esc_listener():
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setcbreak(fd)
+            while not stop_event.is_set():
+                if select.select([sys.stdin], [], [], 0.1)[0]:
+                    ch = sys.stdin.read(1)
+                    if ch == '\x1b':  # ESC key
+                        print("\n🚪 ESC key detected. Stopping...")
+                        stop_event.set()
+                        break
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-    threading.Thread(target=wait_for_enter, daemon=True).start()
-
-    # Run the game menu loop
+    threading.Thread(target=esc_listener, daemon=True).start()
     main_loop(stop_event)
 
 def main_loop(stop_event):
@@ -46,4 +55,4 @@ def main_loop(stop_event):
         print("❌ Invalid selection. Please enter a number from the menu.")
 
 if __name__ == "__main__":
-    run_with_quit_input()
+    run_with_esc_hotkey()
