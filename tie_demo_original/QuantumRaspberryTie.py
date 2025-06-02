@@ -1228,6 +1228,7 @@ rainbowTie.start()                          # start the display thread
 #---------------------- Step 8: START YOUR ENGINES -- everything is set up, lets run our job (and loop)
 
 while Looping:
+   Looping = False
    runcounter += 1
    if "aer" in backendparm: UseLocal=True
    try:
