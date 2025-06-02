@@ -1228,7 +1228,7 @@ rainbowTie.start()                          # start the display thread
 #---------------------- Step 8: START YOUR ENGINES -- everything is set up, lets run our job (and loop)
 
 while Looping:
-   Looping = False
+
    runcounter += 1
    if "aer" in backendparm: UseLocal=True
    try:
@@ -1342,5 +1342,5 @@ while Looping:
                  break
       if (process_time()-myTimer>interval):       # 10 seconds elapsed -- go now
             goAgain=True
-
+   Looping = False
 print("Program Execution ended normally")
