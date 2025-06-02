@@ -1,10 +1,4 @@
 import subprocess
-import threading
-import sys
-import termios
-import tty
-import select
-import time
 
 from lights_out.lights_out_top import *
 from dice_game.dice_game_top import *
@@ -20,39 +14,21 @@ gameArray = [
     ["Option 4 - Zeno Measurement Impact", zeno_demo_main]
 ]
 
-def run_with_esc_hotkey():
-    stop_event = threading.Event()
+def debug_main():
+    choice = int(input("Enter a game option: "))
+    gameArray[choice-1][1]()
 
-    # Background thread to watch for ESC
-    def esc_listener():
-        fd = sys.stdin.fileno()
-        old_settings = termios.tcgetattr(fd)
-        try:
-            tty.setcbreak(fd)
-            while not stop_event.is_set():
-                if select.select([sys.stdin], [], [], 0.1)[0]:
-                    ch = sys.stdin.read(1)
-                    if ch == '\x1b':  # ESC key
-                        print("\n🚪 ESC key detected. Stopping...")
-                        stop_event.set()
-                        break
-        finally:
-            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-    threading.Thread(target=esc_listener, daemon=True).start()
-    main_loop(stop_event)
 
-def main_loop(stop_event):
-    print("🎮 Available Quantum Demos:")
-    for game in gameArray:
-        print(f"\t{game[0]}")
-
-    try:
-        choice = int(input("\nEnter a game option: "))
-        while not stop_event.is_set():
-            gameArray[choice - 1][1]()
-    except (IndexError, ValueError):
-        print("❌ Invalid selection. Please enter a number from the menu.")
-
+# Step 3: Main entry
 if __name__ == "__main__":
-    run_with_esc_hotkey()
+    # debug_main()
+    for game in gameArray:
+        print(f"\t\t {game[0]}")
+    try:
+        choice = int(input("Enter a game option: "))
+        gameArray[choice-1][1]()
+    except:
+        print("Invalid Option")
+
+#comments
