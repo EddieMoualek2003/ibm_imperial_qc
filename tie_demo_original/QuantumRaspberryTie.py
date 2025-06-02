@@ -150,7 +150,7 @@ fake_name = "FakeManilaV2"
 qubits_needed = 5  #default size for the five-qubit simulation
 AddNoise = False
 debug = False
-qasmfileinput='expt.qasm'
+qasmfileinput='tie_demo_original/expt.qasm'
 
 #---------------------- GRAPHICS constants and functions-------------------------------------------
 
