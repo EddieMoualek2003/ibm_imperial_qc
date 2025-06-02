@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ibm_qc_interface import *
+from utils.ibm_qc_interface import *
 from zeno_demo.zeno_demo_functions import *
 
 def zeno_demo_main(numOperators = 4):
