@@ -13,7 +13,7 @@ def run_with_hotkey():
     stop_event = threading.Event()
 
     def on_press(key):
-        if key == keyboard.Key.esc:
+        if key == 'p':
             stop_event.set()
             return False  # stop listener
 
