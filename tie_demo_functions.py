@@ -3,7 +3,7 @@ import qiskit.qasm3
 import numpy as np
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 from qiskit.visualization import circuit_drawer
-import ibm_qc_interface
+from utils.ibm_qc_interface import *
 
 def load_qasm(filename):
     return qiskit.qasm3.load(filename)
@@ -90,7 +90,7 @@ def rank_scores():
 
     # Run the circuit: 1 = use simulator, 0 = use real backend
     # result = ibm_qc_interface.quantum_execute(simulator=1, circuit=qc)
-    result = ibm_qc_interface.noisy_simulator(qc) 
+    result = noisy_simulator(qc) 
     best = max(result, key = result.get)
     score_sorted = sorted(result.items(), key=lambda x: x[1], reverse=False)
     # return f"The best score is {best} and the rest of the results for comparison are {score_sorted}"

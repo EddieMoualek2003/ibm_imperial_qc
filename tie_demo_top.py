@@ -34,4 +34,4 @@ def tie_demo_main():
             print("Now get out...")
 
 
-tie_demo_main()
+# tie_demo_main()

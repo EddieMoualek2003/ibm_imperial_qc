@@ -3,7 +3,7 @@ import argparse
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister, transpile
 
 ## IBM Quantum Computer Interface Module Import
-from ibm_qc_interface import *
+from utils.ibm_qc_interface import *
 
 def map_board(lights, qc, qr):
     j = 0
