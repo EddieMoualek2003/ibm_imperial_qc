@@ -6,6 +6,7 @@ from zeno_demo.zeno_demo_top import *
 
 def run_Tie_demo():
     subprocess.run(["python3", "tie_demo_original/QuantumRaspberryTie.py"])
+    print("Game Ended")
 
 gameArray = [
     ["Option 1 - Lights Out", lights_out_main],
