@@ -1,11 +1,15 @@
+import subprocess
+
 from lights_out.lights_out_top import *
-from tie_demo_top import *
 from dice_game.dice_game_top import *
 from zeno_demo.zeno_demo_top import *
 
+def run_Tie_demo():
+    subprocess.run(["python3", "tie_demo_original/QuantumRaspberryTie.py"])
+
 gameArray = [
     ["Option 1 - Lights Out", lights_out_main],
-    ["Option 2 - Tie Demo", tie_demo_main],
+    ["Option 2 - Tie Demo", run_Tie_demo],
     ["Option 3 - Schrodinger Dice Game", dice_game_main],
     ["Option 4 - Zeno Measurement Impact", zeno_demo_main]
 ]
