@@ -190,7 +190,7 @@ def create_quantum_circuit(n_count, m_target):
 
 def measure(qc):
     # Run simulation
-    counts = quantum_execute_evolved(simulator=1, cirucit = qc)
+    counts = quantum_execute_evolved(simulator=1, circuit = qc)
     
     return counts
 
