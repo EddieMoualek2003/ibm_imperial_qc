@@ -1,5 +1,5 @@
 from qiskit import transpile, QuantumCircuit
-from ibm_qc_interface import *
+from utils.ibm_qc_interface import *
 import numpy as np
 from math import gcd, ceil, log2
 from collections import Counter

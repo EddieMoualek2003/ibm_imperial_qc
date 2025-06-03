@@ -1,4 +1,4 @@
-from Shor_functions import *
+from shor_demo.Shor_functions import *
 from random import randint
 
 
@@ -12,7 +12,7 @@ def run_quantum_circuit(n_count, m_target):
     return frequency
 
 
-def main():
+def shor_main():
     print("Started")
     # Stop can be changed on whether a solution is found by either the quantum computer/user OR if no solution has been found in 5 turns each
     numTries = 0
@@ -40,5 +40,3 @@ def main():
                 numTries+=1
         else:
             continue
-
-main()
