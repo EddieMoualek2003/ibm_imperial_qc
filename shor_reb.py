@@ -11,6 +11,7 @@ from fractions import Fraction
 from collections import Counter
 import numpy as np
 from math import ceil, log, gcd
+from ibm_qc_interface import *
 
 # from qiskit.utils import QuantumInstance
 
@@ -189,7 +190,8 @@ def create_quantum_circuit(n_count, m_target):
 
 def measure(qc):
     # Run simulation
-    counts = AerSimulator(qc)
+    counts = quantum_execute_evolved(simulator=1, cirucit = qc)
+    
     return counts
 
 def result_clean_convert(counts):
