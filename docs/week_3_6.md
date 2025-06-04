@@ -102,6 +102,7 @@ This project aims to develop a 3D Printed Portable AI Quantum Machine — a Rasp
 - [Week 3–6 Video Update:](https://1drv.ms/v/c/1772c53d76259fc4/EUK-lWt6yeRLuQLRQlDd9acBM8vOAQppoUycONMfOCWMKw?e=OLRzbD)
 - [Learning Journal / RAG Analysis:](https://docs.google.com/spreadsheets/d/1sF9Oc2OouF73Z6AvovJ69b6G2dEbBKRIfdPd3dAS7XI/edit?usp=sharing)
 - [GitHub Repository:](https://github.com/EddieMoualek2003/ibm_imperial_qc)
+- [Jira Board:](https://team9ibmquantum.atlassian.net/jira/software/projects/AQMP/summary?atlOrigin=eyJpIjoiN2IwNmVlOTcwNTMwNGExOTk2MTJkYjA2Y2VlOTk2OGUiLCJwIjoiaiJ9)
 
 ---
 
