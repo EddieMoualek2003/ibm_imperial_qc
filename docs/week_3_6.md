@@ -99,9 +99,9 @@ This project aims to develop a 3D Printed Portable AI Quantum Machine — a Rasp
 ## Reference Links
 
 - [Project Minutes – 03/06/2025 (PDF):](https://1drv.ms/b/c/1772c53d76259fc4/EXuCs8A4DbhCuAW8g1zfctYBbxj7GsIyjUK4-_qUwMNh_w?e=f5GYdg)
-- [Week 3–6 Video Update:] (https://1drv.ms/v/c/1772c53d76259fc4/EUK-lWt6yeRLuQLRQlDd9acBM8vOAQppoUycONMfOCWMKw?e=OLRzbD)
-- [Learning Journal / RAG Analysis:] (https://docs.google.com/spreadsheets/d/1sF9Oc2OouF73Z6AvovJ69b6G2dEbBKRIfdPd3dAS7XI/edit?usp=sharing)
-- [GitHub Repository:] (https://github.com/EddieMoualek2003/ibm_imperial_qc)
+- [Week 3–6 Video Update:](https://1drv.ms/v/c/1772c53d76259fc4/EUK-lWt6yeRLuQLRQlDd9acBM8vOAQppoUycONMfOCWMKw?e=OLRzbD)
+- [Learning Journal / RAG Analysis:](https://docs.google.com/spreadsheets/d/1sF9Oc2OouF73Z6AvovJ69b6G2dEbBKRIfdPd3dAS7XI/edit?usp=sharing)
+- [GitHub Repository:](https://github.com/EddieMoualek2003/ibm_imperial_qc)
 
 ---
 
