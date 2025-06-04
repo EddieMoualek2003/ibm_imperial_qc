@@ -65,8 +65,6 @@ This project aims to develop a 3D Printed Portable AI Quantum Machine — a Rasp
 ## IBM SkillsBuild Learning Progress
 
 - Completed:
-  - Getting Started with AI
-  - Granite for Software Development
   - Classifying Data Using IBM Granite
 - RAG Analysis updated to reflect progress and reprioritised courses based on ongoing project needs.
 
