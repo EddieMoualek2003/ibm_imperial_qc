@@ -1,4 +1,4 @@
-# Week 3–6 Progress Report – 3D Printed Portable AI Quantum Machine
+# Week 5–6 Progress Report – 3D Printed Portable AI Quantum Machine
 
 ## Timeline: 23 May – 4 June 2025  
 Prepared by: Eddie Moualek
