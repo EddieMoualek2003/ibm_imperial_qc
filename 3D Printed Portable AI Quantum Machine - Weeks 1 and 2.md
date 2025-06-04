@@ -2,5 +2,5 @@
 
 ## 🔹 Updates by Week
 
-- [Week 1–2 Progress Report](docs/week1-2.md)
-- [Week 3–5 Progress Report](docs/week3-6.md)
+- [Week 1–2 Progress Report](docs/week_1_2.md)
+- [Week 3–5 Progress Report](docs/week_3_6.md)
