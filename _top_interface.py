@@ -1,11 +1,12 @@
 import subprocess
 
-from lights_out.lights_out_top import *
-from dice_game.dice_game_top import *
-from zeno_demo.zeno_demo_top import *
-from shor_demo.Shor_top import *
-
-shor_main()
+# from lights_out.lights_out_top import *
+# from dice_game.dice_game_top import *
+# from zeno_demo.zeno_demo_top import *
+# from shor_demo.Shor_top import *
+from shor_demo_v2.shor_top_v2 import *
+while True:
+    shor_game()
 
 # def run_Tie_demo():
 #     subprocess.run(["python3", "tie_demo_original/QuantumRaspberryTie.py"])
