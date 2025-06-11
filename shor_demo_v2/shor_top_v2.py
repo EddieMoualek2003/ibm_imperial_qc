@@ -12,7 +12,7 @@ def shor_game():
 
     # Select composite N
     while True:
-        N = randint(10, 50)
+        N = 33
         if not isprime(N):
             break
 
