@@ -20,10 +20,12 @@ def noisy_simulator(qc):
     # Transpile circuit
     qc_t = transpile(qc, simulator)
     # Run simulation
-    job = simulator.run(qc_t, shots=1024)
+    shots = 1024
+    # Note: shots is set to 1024, but can be adjusted as needed.
+    job = simulator.run(qc_t, shots=shots)
     result = job.result()
     counts = result.get_counts()
-    return counts
+    return counts, shots
 
 def ideal_simulator(qc):
     """
@@ -31,10 +33,12 @@ def ideal_simulator(qc):
     """
     simulator = AerSimulator()
     qc_t = transpile(qc, simulator)
-    job = simulator.run(qc_t, shots=1024)
+    shots = 1024  # Number of shots for the simulation
+    # Note: shots is set to 1024, but can be adjusted as needed.
+    job = simulator.run(qc_t, shots=shots)
     result = job.result()
     counts = result.get_counts()
-    return counts
+    return counts, shots
 
 
 

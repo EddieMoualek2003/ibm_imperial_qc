@@ -6,6 +6,8 @@ from qiskit.visualization import plot_histogram
 from math import *
 import pickle
 
+
+
 ## This function is responsible for returning pairs that will be used to place measurements after certain numbers of operations
 def returnFactors(numOperators):
     factors = []
@@ -23,11 +25,12 @@ def returnFactors(numOperators):
     return factorPairs
 
 
-def simulatedMeasurement(numOperators, theta):
+
+def create_circuit(numOperators, theta):
     qc1 = QuantumCircuit(1, 1)
     for i in range(numOperators):
         qc1.ry(theta, 0)
-    qc1.measure_all()
+    qc1.measure(0, 0)
     return qc1
 
 

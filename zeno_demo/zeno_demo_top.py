@@ -3,8 +3,27 @@ import matplotlib.pyplot as plt
 from utils.ibm_qc_interface import *
 from zeno_demo.zeno_demo_functions import *
 
+
+def process_circuit(numOpPerStage, noisy=False):
+    probabilityArray = []
+    circuit = create_circuit(numOpPerStage, theta=pi/2) # Create the circuit with the number of operators and theta value
+    print("Circuit Created")
+    if noisy:
+        print("Noisy Simulator Mode")
+        # Run the circuit on the noisy simulator
+        s1, shots = noisy_simulator(circuit)
+    else:
+        print("Ideal Simulator Mode")
+        # Run the circuit on the ideal simulator
+        s1, shots = ideal_simulator(circuit)
+    numZero = list(s1.values())[list(s1.keys()).index('0')] # Find the occurence of 0
+    p = numZero/shots # Calculate the probability of measuring the zero state
+    return s1, circuit, probabilityArray, p
+
+
 def zeno_demo_main(numOperators = 4):
-    simulator = 1
+    # Everything will be run on the simulator, so set this to True.
+    simulator = True
     probabilityGroup = []
     circuitGroup = []
     factorArray = returnFactors(numOperators)
@@ -13,12 +32,7 @@ def zeno_demo_main(numOperators = 4):
         numIter = factorPair[1]
         for i in range(numIter): # Repeat for all the iterations needed
             print(f">>> # Operators: {numOperators}, # Iterations: {numIter}, Current Iteration: {i + 1}")
-            probabilityArray = []
-            circuit = simulatedMeasurement(numOpPerStage, 0.2)
-            print("Circuit Created")
-
-            s1 = quantum_execute_evolved(simulator=simulator, circuit=circuit)
-            print("Job Executed")
+            s1, circuit, probabilityArray = process_circuit(numOpPerStage=numOpPerStage, noisy=simulator)
 
             numZero = list(s1.values())[list(s1.keys()).index('0')] # Find the occurence of 0
             p = numZero/4096
