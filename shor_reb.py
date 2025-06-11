@@ -7,18 +7,20 @@ from math import log2
 from qiskit_aer import AerSimulator
 from qiskit.circuit.library import QFT
 from qiskit import QuantumCircuit, transpile
+from qiskit_aer import Aer 
 from fractions import Fraction
 from collections import Counter
 import numpy as np
-from math import ceil, log, gcd
+from math import ceil, gcd
+from qiskit.circuit.library import UnitaryGate
 from ibm_qc_interface import *
 
-# from qiskit.utils import QuantumInstance
 
+### Pygame setup
 pygame.init()
 WIDTH, HEIGHT = 900, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Period Hunter â€“ Factor Quest")
+pygame.display.set_caption("Period Hunter – Factor Quest")
 font = pygame.font.SysFont(None, 36)
 small_font = pygame.font.SysFont(None, 24)
 
@@ -34,6 +36,8 @@ BUTTON_HEIGHT = 40
 BUTTON_MARGIN = 10
 BUTTON_Y = 150
 
+
+### pygame functions
 def generate_sequence(a, N, max_length=30):
     vals = []
     val = 1
@@ -67,9 +71,10 @@ def calculate_factors(a, r, N):
     return factor1, factor2
 
 def new_problem():
-    semiprimes = [(15, 2), (21, 2), (35, 3), (33, 2), (55, 2), (77, 3)]
+    semiprimes = [(15, 2), (21, 2), (35, 3), (33, 2)] #, (55, 2), (77, 3)
     while True:
         N, a = random.choice(semiprimes)
+        print (f"New problem: N={N}, a={a}")
         seq = generate_sequence(a, N)
         period = len(seq)
         factors = calculate_factors(a, period, N)
@@ -109,142 +114,84 @@ def run_fake_shor(N):
             return factors
     return None
 
-# Using Qiskit
-def run_with_qiskit(a=2, N=15):
-    t = 4
-    n = 4
-    qc = QuantumCircuit(t + n, t)
 
-    for i in range(t):
-        qc.h(i)
+### Qiskit functions
+# create a unitary gate for modular multiplication
+def mod_mul_gate_unitary(a: int, N: int, m_target: int) -> UnitaryGate:
+    dim = 2 ** m_target
+    U = np.zeros((dim, dim), dtype=complex)
+    for y in range(dim):
+        if y < N:
+            U[(a * y) % N, y] = 1.0
+        else:
+            U[y, y] = 1.0
 
-    qc.x(t + n - 1)
+    return UnitaryGate(U, label=f"mult_{a}_mod_{N}")
 
-    for i in range(t):
-        qc.cx(i, t + i % n)
-
-    qc.append(QFT(num_qubits=t, inverse=True).to_gate(), range(t))
-
-    qc.measure(range(t), range(t))
-
-    sim = AerSimulator()
-    tqc = transpile(qc, sim)
-    result = sim.run(tqc).result()
-    counts = result.get_counts()
-
-    most_common = max(counts, key=counts.get)
-    decimal = int(most_common, 2)
-    phase = decimal / (2**t)
-    
-    # Try continued fraction to estimate the period
-    try:
-        frac = Fraction(phase).limit_denominator(N)
-        r = frac.denominator
-        if pow(a, r, N) == 1:
-            return r
-    except:
-        pass
-
-    return None
-###########################################
-def create_quantum_circuit(n_count, m_target):
-    # total qubits: counting + target, measured only on counting
+# create a quantum circuit for Shor's algorithm
+def create_quantum_circuit(n_count, m_target, a, N):
     qc = QuantumCircuit(n_count + m_target, n_count)
+    qc.h(range(n_count))                  # Hadamard on counting qubits
+    qc.x(n_count)                         # |1⟩ state in target register
 
-    # Apply Hadamard to counting qubits
-    qc.h(range(n_count))
-
-    # Initialize target register to |1âŸ©
-    qc.x(n_count + 0)
-
-    # Controlled modular multiplication of a^2^j mod N
     for q in range(n_count):
-        # Define the "modular multiplication" gate (placeholder)
-        mod_gate = QuantumCircuit(m_target, name=f"U_{2**q}")
-        mod_gate.unitary(np.identity(2**m_target), range(m_target))  # Identity for now
-        mod_gate_gate = mod_gate.to_gate()
-        controlled_mod_gate = mod_gate_gate.control()  # Add 1 control qubit
+        power = pow(a, 2 ** q, N)
+        mod_gate = mod_mul_gate_unitary(power, N, m_target).control()
+        qc.append(mod_gate, [q] + list(range(n_count, n_count + m_target)))
 
-        # Append to the circuit with correct qubit indices
-        qc.append(
-            controlled_mod_gate, 
-            [q] + list(range(n_count, n_count + m_target))  # Control + target
-        )
-        # Placeholder: normally you'd implement modular exponentiation here
-
-    # Apply inverse QFT to counting qubits
-    def qft_dagger(circuit, n):
-        """Inverse QFT for n qubits."""
-        for qubit in range(n // 2):
-            circuit.swap(qubit, n - qubit - 1)
-        for j in range(n):
-            for m in range(j):
-                circuit.cp(-np.pi / float(2**(j - m)), m, j)
-            circuit.h(j)
-
-    qft_dagger(qc, n_count)
-
-    # Measure the counting qubits
-    qc.measure_all()
+    # Apply inverse QFT
+    qc.append(QFT(n_count, inverse=True, do_swaps=True).to_gate(label="QFT†"), range(n_count))
+    qc.measure(range(n_count), range(n_count))
     return qc
 
 def measure(qc):
-    # Run simulation
-    counts = quantum_execute_evolved(simulator=1, circuit = qc)
-    
-    return counts
+    sim = Aer.get_backend('statevector_simulator') #AerSimulator()
+    tqc = transpile(qc, sim)
+    result = sim.run(tqc).result()
+    return result.get_counts()
 
+# Convert the result counts to a cleaned format
 def result_clean_convert(counts):
-    # Clean results: only take the counting bits
-    cleaned_counts = {}
+    cleaned_counts = Counter()
     for bitstring, count in counts.items():
-        bits = bitstring.split(' ')[0]  # Only take the counting qubits
-        if bits in cleaned_counts:
-            cleaned_counts[bits] += count
-        else:
-            cleaned_counts[bits] = count
+        bits = bitstring.split(' ')[0]
+        cleaned_counts[int(bits, 2)] += count
+    return cleaned_counts
 
-    # Convert to decimal and analyze frequencies
-    decimal_results = [int(bits, 2) for bits in cleaned_counts for _ in range(cleaned_counts[bits])]
-    frequency = Counter(decimal_results)
-    return frequency
-
-# Estimate the phase
 def estimate_period(measured_value, n_count, N):
-    phi = measured_value / (2**n_count)
-    frac = Fraction(phi).limit_denominator(N)
+    phase = (measured_value) / (2**n_count)
+    frac = Fraction(phase).limit_denominator(N)
+    print(f"Phase ≈ {phase}, Approximated as {frac}, period r = {frac.denominator}")
     return frac.denominator
 
+# math to find factors of N using the period r
 def find_factors(frequency, n_count, N, a):
-    r_array = []
-    exclude_array = [1, N]
     for value, _ in frequency.most_common(5):
         r = estimate_period(value, n_count, N)
-        if r % 2 == 0:
-            r_array.append(r)
+        if r % 2 == 0 and pow(a, r, N) == 1:
+            x = pow(a, r // 2, N)
+            factors = [gcd(x - 1, N), gcd(x + 1, N), r] 
+            # for f in factors:
+            #     if f not in [1, N]:
+            #         return f
+            if factors[0] not in [1, N] and factors[1] not in [1, N]:
+                print (f"Found period r={r}")
+                return factors
+    return None, None
 
-    # Try factoring with valid r values
-    for r in r_array:
-        x = pow(a, r // 2, N)
-        res_array = [gcd(x - 1, N), gcd(x + 1, N)]
-        for res in res_array:
-            if res not in exclude_array:
-                return res
-            break
-        else:
-            return 0
-    else:
-        return 0
-def run_quantum_circuit(n_count, m_target):
-    qc = create_quantum_circuit(n_count, m_target)
+# Run the quantum circuit and return the frequency of measured values
+def run_quantum_circuit(n_count, m_target, a, N):
+    qc = create_quantum_circuit(n_count, m_target, a, N)
     print("Circuit Created")
     counts = measure(qc)
-    print("Circuit Measured")
+    print("Circuit Measured", counts)
     frequency = result_clean_convert(counts)
-    print("Frequency Recorded")
+    print("Frequency Recorded: ", frequency)
     return frequency
+
+
+### Main game loop
 def main():
-    # Initialisierung aller Variablen
     intro_number = 3315
     intro_factors = [3, 5]
     prime_options = [2, 3, 5, 7, 11, 13, 17, 19, 23]
@@ -273,7 +220,8 @@ def main():
         "Press 'H' to toggle hint showing cycle repetition.",
         "Press 'R' to restart with a new problem.",
         "Press 'Q' to factor with simulated Shor.",
-        "Backspace to delete digits."
+        "Backspace to delete digits.",
+        "Press 'X' to leave the game."
     ]
 
     buttons = []
@@ -352,14 +300,6 @@ def main():
                 color = GREEN if "correct" in result_text.lower() else RED
                 render_centered_text(result_text, HEIGHT - 180, color)
 
-        # elif phase == "challenge":
-        #     render_centered_text("Factors:", 110, GREEN)
-        #     render_centered_text(f"{factors[0]} and {factors[1]}", 150, GREEN)
-        #     render_centered_text("Enter N and press Enter: " + guess, 200)
-        #     if result_text:
-        #         color = GREEN if "correct" in result_text.lower() else RED
-        #         render_centered_text(result_text, HEIGHT - 180, color)
-
         elif phase == "completed":
             render_centered_text("Congratulations! You reconstructed N correctly!", 150, GREEN)
             render_centered_text(f"N = {factors[0]} * {factors[1]} = {N}", 190, GREEN)
@@ -427,6 +367,8 @@ def main():
                         else:
                             result_text = "Please enter a valid number."
                         guess = ""
+                    elif event.key == pygame.K_x:
+                        running = False
                     elif event.key == pygame.K_BACKSPACE:
                         guess = guess[:-1]
                     elif event.unicode.isdigit():
@@ -488,12 +430,6 @@ def main():
                         elif factor_input_stage == 2 and len(user_factor2) < 10:
                             user_factor2 += event.unicode
 
-                # elif phase == "show_factors":
-                #     if event.key == pygame.K_RETURN:
-                #         phase = "challenge"
-                #         guess = ""
-                #         result_text = ""
-
                 elif phase == "show_factors":
                     if event.key == pygame.K_RETURN:
                         if guess.isdigit():
@@ -529,7 +465,6 @@ def main():
                         factor_input_stage = 1
                         selected_factors = set()
 
-                # Globale Tasten fÃ¼r Hint und Neustart (auÃŸer in bestimmten Phasen)
                 if event.key == pygame.K_h and phase not in ["intro_factor_select", "intro_shor_explain", "show_formula", "completed"]:
                     show_hint = not show_hint
 
@@ -549,27 +484,30 @@ def main():
                     print(a)
                     print(N)
                     m_target = ceil(log2(N))
-                    quantum_r = run_quantum_circuit(a, m_target)
-                    quantum_r = 1/quantum_r
-                    print(quantum_r)
-                    if quantum_r:
-                        factors = calculate_factors(a, quantum_r, N)
-                        if factors != (None, None):
-                            result_text = f"Qiskit found period r={quantum_r}, factors: {factors[0]}, {factors[1]}"
-                            phase = "show_factors"
-                        else:
-                            result_text = f"Period r={quantum_r} did not yield nontrivial factors."
-                    else:
+                    n_count = ceil(log2(N**2))
+                    
+
+                    frequency = run_quantum_circuit(n_count, m_target, a, N)
+
+                    if not frequency:
                         result_text = "Quantum simulation failed to find a usable period."
+                    else:
+                        measured_value, _ = frequency.most_common(1)[0]
+                        print(f"Measured value: {measured_value}")
+                        r = estimate_period(measured_value, n_count, N=N)
+                        print(f"Estimated period r: {r}")
 
-
-                    # fake_factors = run_fake_shor(N)
-                    # if fake_factors:
-                    #     factors = fake_factors
-                    #     result_text = f"Simulated Shor factors: {factors[0]}, {factors[1]}"
-                    #     phase = "show_factors"
-                    # else:
-                    #     result_text = "No factors found by simulated Shor."
+                        if r and r > 0:
+                            factors = find_factors(frequency, n_count, N, a) #calculate_factors(a, r, N)
+                            r = factors[2] if factors else r
+                            print(f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}")
+                            if factors != (None, None):
+                                result_text = f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}" #period was r
+                                phase = "show_factors"
+                            else:
+                                result_text = f"Period r={r} did not yield nontrivial factors." #period was r
+                        else:
+                            result_text = "Failed to estimate a valid period."
 
         pygame.display.flip()
         clock.tick(30)
