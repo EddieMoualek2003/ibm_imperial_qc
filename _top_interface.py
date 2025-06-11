@@ -5,7 +5,9 @@ import subprocess
 from zeno_demo.zeno_demo_top import *
 # from shor_demo.Shor_top import *
 from shor_demo_v2.shor_top_v2 import *
-zeno_demo_main()
+# zeno_demo_main()
+while True:
+    shor_game()
 
 
 

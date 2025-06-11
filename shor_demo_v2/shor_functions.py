@@ -49,7 +49,7 @@ def create_quantum_circuit(n_count, m_target):
 def measure(qc):
     # Run simulation
     counts = ideal_simulator(qc)
-    return counts
+    return counts[0]
 
 def result_clean_convert(counts):
     # Clean results: only take the counting bits

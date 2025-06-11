@@ -12,7 +12,7 @@ def shor_game():
 
     # Select composite N
     while True:
-        N = 33
+        N = 35
         if not isprime(N):
             break
 
@@ -27,7 +27,7 @@ def shor_game():
         # Alternate: even = human, odd = quantum
 
         try:
-            guess = int(input("🧑‍💻 Your turn! Enter a guess for a nontrivial factor of N: "))
+            guess = 1#int(input("🧑‍💻 Your turn! Enter a guess for a nontrivial factor of N: "))
             if guess in [1, N]:
                 print("❌ Trivial factor. Try something else.")
             elif N % guess == 0:

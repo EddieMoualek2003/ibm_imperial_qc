@@ -32,10 +32,10 @@ def zeno_demo_main(numOperators = 4):
         numIter = factorPair[1]
         for i in range(numIter): # Repeat for all the iterations needed
             print(f">>> # Operators: {numOperators}, # Iterations: {numIter}, Current Iteration: {i + 1}")
-            s1, circuit, probabilityArray = process_circuit(numOpPerStage=numOpPerStage, noisy=simulator)
+            s1, circuit, probabilityArray, p = process_circuit(numOpPerStage=numOpPerStage, noisy=simulator)
 
-            numZero = list(s1.values())[list(s1.keys()).index('0')] # Find the occurence of 0
-            p = numZero/4096
+            # numZero = list(s1.values())[list(s1.keys()).index('0')] # Find the occurence of 0
+            # p = numZero/4096
             print(f"Probability of Zero State is {p}")
             if i < numIter - 1:
                 if p > 0.5: # This means the state has not changed from the 0 state yet.

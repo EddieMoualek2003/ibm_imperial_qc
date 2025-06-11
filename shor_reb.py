@@ -71,7 +71,7 @@ def calculate_factors(a, r, N):
     return factor1, factor2
 
 def new_problem():
-    semiprimes = [(15, 2), (21, 2), (35, 3), (33, 2)] #, (55, 2), (77, 3)
+    semiprimes = [(35, 9), (35, 9)] # [(15, 2), (21, 2), (35, 3), (33, 2)] #, (55, 2), (77, 3)
     while True:
         N, a = random.choice(semiprimes)
         print (f"New problem: N={N}, a={a}")
@@ -177,7 +177,7 @@ def find_factors(frequency, n_count, N, a):
             if factors[0] not in [1, N] and factors[1] not in [1, N]:
                 print (f"Found period r={r}")
                 return factors
-    return None, None
+    return None, None, None
 
 # Run the quantum circuit and return the frequency of measured values
 def run_quantum_circuit(n_count, m_target, a, N):
@@ -497,17 +497,39 @@ def main():
                         r = estimate_period(measured_value, n_count, N=N)
                         print(f"Estimated period r: {r}")
 
-                        if r and r > 0:
-                            factors = find_factors(frequency, n_count, N, a) #calculate_factors(a, r, N)
-                            r = factors[2] if factors else r
-                            print(f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}")
-                            if factors != (None, None):
-                                result_text = f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}" #period was r
-                                phase = "show_factors"
+                        stop = False
+                        a_used = []
+                        while not stop:
+                            a = random.randint(2, N-1)
+                            if a in a_used:
+                                continue
                             else:
-                                result_text = f"Period r={r} did not yield nontrivial factors." #period was r
-                        else:
-                            result_text = "Failed to estimate a valid period."
+                                a_used.append(a)
+                                print(f"Current value of a is {a}")
+                                factors = find_factors(frequency, n_count, N, a)
+                                if factors[0] is None:
+                                    stop = False
+                                    print("Failed to estimate a valid period. Trying Again")
+                                else:
+                                    stop = True
+                                    r = factors[2] if factors else r
+                                    print(f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}")
+                                    phase = "show_factors"
+                                    result_text = f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}" #period was r
+
+
+
+                        # if r and r > 0:
+                        #     factors = find_factors(frequency, n_count, N, a) #calculate_factors(a, r, N)
+                        #     r = factors[2] if factors else r
+                        #     print(f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}")
+                        #     if factors != (None, None):
+                        #         result_text = f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}" #period was r
+                        #         phase = "show_factors"
+                        #     else:
+                        #         result_text = f"Period r={r} did not yield nontrivial factors." #period was r
+                        # else:
+                        #     result_text = "Failed to estimate a valid period."
 
         pygame.display.flip()
         clock.tick(30)
