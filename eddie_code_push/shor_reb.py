@@ -3,7 +3,6 @@ import sys
 import math
 import random
 from math import log2
-from random import randint
 
 from qiskit_aer import AerSimulator
 from qiskit.circuit.library import QFT
@@ -14,9 +13,6 @@ from collections import Counter
 import numpy as np
 from math import ceil, gcd
 from qiskit.circuit.library import UnitaryGate
-
-## KEY CHANGE - UTILS FOLDER NOW HOLDS ALL THIS STUFF
-from utils.shor_func import *
 from utils.ibm_qc_interface import *
 
 
@@ -75,13 +71,9 @@ def calculate_factors(a, r, N):
     return factor1, factor2
 
 def new_problem():
-    #adapt semiprimes
-    semiprimes = [15, 21, 35, 33, 55, 77] #[(15, 2), (21, 2), (35, 3), (33, 2)] #, (55, 2), (77, 3)
-
+    semiprimes = [(35, 9), (35, 9)] # [(15, 2), (21, 2), (35, 3), (33, 2)] #, (55, 2), (77, 3)
     while True:
-        N = random.choice(semiprimes)
-        a = randint(2, N - 1) 
-
+        N, a = random.choice(semiprimes)
         print (f"New problem: N={N}, a={a}")
         seq = generate_sequence(a, N)
         period = len(seq)
@@ -153,7 +145,7 @@ def create_quantum_circuit(n_count, m_target, a, N):
     return qc
 
 def measure(qc):
-    sim = AerSimulator()
+    sim = Aer.get_backend('statevector_simulator') #AerSimulator()
     tqc = transpile(qc, sim)
     result = sim.run(tqc).result()
     return result.get_counts()
@@ -199,7 +191,7 @@ def run_quantum_circuit(n_count, m_target, a, N):
 
 
 ### Main game loop
-def shor_reb_main():
+def main():
     intro_number = 3315
     intro_factors = [3, 5]
     prime_options = [2, 3, 5, 7, 11, 13, 17, 19, 23]
@@ -332,8 +324,6 @@ def shor_reb_main():
                             break
 
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_x:
-                    running = False
                 if phase == "intro_factor_select":
                     if event.key == pygame.K_RETURN:
                         if selected_factors == set(intro_factors):
@@ -377,6 +367,8 @@ def shor_reb_main():
                         else:
                             result_text = "Please enter a valid number."
                         guess = ""
+                    elif event.key == pygame.K_x:
+                        running = False
                     elif event.key == pygame.K_BACKSPACE:
                         guess = guess[:-1]
                     elif event.unicode.isdigit():
@@ -493,39 +485,51 @@ def shor_reb_main():
                     print(N)
                     m_target = ceil(log2(N))
                     n_count = ceil(log2(N**2))
+                    
 
-                    attempts = 0
-                    max_attempts = 10
-                    factors = None
+                    frequency = run_quantum_circuit(n_count, m_target, a, N)
 
-                    while attempts < max_attempts and factors is None:
-                        facs, frequency = shor_func(N, a) #run_quantum_circuit(n_count, m_target, a, N)
-
-                        if not frequency:
-                            result_text = "Quantum simulation failed to get data."
-                            break
-
+                    if not frequency:
+                        result_text = "Quantum simulation failed to find a usable period."
+                    else:
                         measured_value, _ = frequency.most_common(1)[0]
                         print(f"Measured value: {measured_value}")
                         r = estimate_period(measured_value, n_count, N=N)
                         print(f"Estimated period r: {r}")
 
-                        if r and (r > 0):
-                            factors = find_factors(frequency, n_count, N, a)
+                        stop = False
+                        a_used = []
+                        while not stop:
+                            a = random.randint(2, N-1)
+                            if a in a_used:
+                                continue
+                            else:
+                                a_used.append(a)
+                                print(f"Current value of a is {a}")
+                                factors = find_factors(frequency, n_count, N, a)
+                                if factors[0] is None:
+                                    stop = False
+                                    print("Failed to estimate a valid period. Trying Again")
+                                else:
+                                    stop = True
+                                    r = factors[2] if factors else r
+                                    print(f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}")
+                                    phase = "show_factors"
+                                    result_text = f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}" #period was r
 
-                        if factors is None:
-                            a = randint(2, N - 1)
-                            print(f"Trying new a = {a}")
-                            attempts += 1
 
-                    if factors:
-                        r = factors[2]
-                        print(f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}")
-                        result_text = f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}"
-                        phase = "show_factors"
-                    else:
-                        result_text = "Qiskit could not find good period/factors after several tries."
 
+                        # if r and r > 0:
+                        #     factors = find_factors(frequency, n_count, N, a) #calculate_factors(a, r, N)
+                        #     r = factors[2] if factors else r
+                        #     print(f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}")
+                        #     if factors != (None, None):
+                        #         result_text = f"Qiskit found period r={r}, factors: {factors[0]}, {factors[1]}" #period was r
+                        #         phase = "show_factors"
+                        #     else:
+                        #         result_text = f"Period r={r} did not yield nontrivial factors." #period was r
+                        # else:
+                        #     result_text = "Failed to estimate a valid period."
 
         pygame.display.flip()
         clock.tick(30)
@@ -534,4 +538,4 @@ def shor_reb_main():
     sys.exit()
 
 if __name__ == "__main__":
-    shor_reb_main()
+    main()

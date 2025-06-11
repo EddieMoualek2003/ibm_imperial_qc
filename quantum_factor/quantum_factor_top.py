@@ -1,20 +1,9 @@
-from shor_demo_v2.shor_update_v2 import *
-from shor_demo_v2.shor_functions import *
+from utils.shor_func import *
 from random import randint
 from sympy import isprime
 from math import gcd, log2, ceil
 
-def shor_func(N, a):
-    
-    m_target = ceil(log2(N))
-    n_count = 2 * m_target
-    qc = create_shor_qpe_circuit(n_count, m_target, a, N)
-    counts = measure(qc)
-    frequency = result_clean_convert(counts)
-    factor = find_factors(frequency, n_count, N, a)
-    return factor, frequency
-
-def shor_game():
+def quantum_factor_game():
     print("🎮 Welcome to the Shor's Algorithm Game!")
     numTries = 0
     maxTries = 5
@@ -22,7 +11,7 @@ def shor_game():
 
     # Select composite N
     while True:
-        N = 35
+        N = 55
         if not isprime(N):
             break
 
