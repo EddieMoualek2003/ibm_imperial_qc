@@ -23,6 +23,7 @@ while true; do
   echo "4. Functional Entanglement Game (funcentaglegame.py)"
   echo "5. Quantum Factor Game (quantum_factor_gui.py)"
   echo "6. Quantum Zeno Game (zeno_gui.py)"
+  echo "7. Dice Game"
   echo ". Exit"
   echo ""
 
@@ -35,6 +36,7 @@ while true; do
     4) run_game "funcentaglegame.py" ;;
     5) run_game "quantum_factor_gui.py" ;;
     6) run_game "zeno_gui.py" ;;
+    7) run_game "dice_gui.py" ;;
     10) echo "Goodbye!"; exit 0 ;;
     *) echo "? Invalid choice. Please try again." ;;
   esac

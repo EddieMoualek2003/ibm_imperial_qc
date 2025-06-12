@@ -11,7 +11,7 @@ def quantum_factor_game():
 
     # Select composite N
     while True:
-        N = 15
+        N = 25
         if not isprime(N):
             break
 
