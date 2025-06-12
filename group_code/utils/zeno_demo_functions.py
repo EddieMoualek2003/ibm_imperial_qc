@@ -27,12 +27,33 @@ def returnFactors(numOperators):
 
 
 
+# def create_circuit(numOperators, theta):
+#     qc1 = QuantumCircuit(1, 1)
+#     for i in range(numOperators):
+#         qc1.ry(theta, 0)
+#     qc1.measure(0, 0)
+#     return qc1
+
 def create_circuit(numOperators, theta):
-    qc1 = QuantumCircuit(1, 1)
-    for i in range(numOperators):
-        qc1.ry(theta, 0)
-    qc1.measure(0, 0)
-    return qc1
+    """
+    Builds a circuit that applies numOperators stages of evolution,
+    each followed by a measurement to simulate the Quantum Zeno effect.
+    """
+    qc = QuantumCircuit(1, 1)
+
+    # Split total angle into smaller steps
+    d_theta = theta / numOperators
+
+    for _ in range(numOperators):
+        qc.ry(d_theta, 0)   # Partial evolution
+        qc.measure(0, 0)    # Simulate collapse
+        qc.reset(0)         # Reset to |0⟩ for next stage
+
+    # Optional: add one final measurement to record the state
+    qc.measure(0, 0)
+
+    return qc
+
 
 
 def zeno_data_analysis(xeno_qc_structure):
@@ -41,15 +62,16 @@ def zeno_data_analysis(xeno_qc_structure):
     probabilities = xeno_qc_structure['P']
     factorArray = xeno_qc_structure['dim']
 
-    for i, circuit in enumerate(circuits):
-        fig = circuit.draw("mpl")
-        fig.savefig(f"resource_folder/zeno_quantum_circuit{i}.png")
+    # for i, circuit in enumerate(circuits):
+    #     fig = circuit.draw("mpl")
+    #     fig.savefig(f"resource_folder/zeno_quantum_circuit{i}.png")
 
     return [probabilities, [row[1] for row in factorArray]]
 
 def write_pickle(zeno_qc_structure, numOperators, backend = "simulator"):
-    with open(f"resource_folder/quantum_zeno_data_num_op{numOperators}_{backend}.pkl", "wb") as f:
-        pickle.dump(zeno_qc_structure, f)
+    # with open(f"resource_folder/quantum_zeno_data_num_op{numOperators}_{backend}.pkl", "wb") as f:
+    #     pickle.dump(zeno_qc_structure, f)
+    return 0
 
 def process_circuit(numOpPerStage, noisy=False):
     probabilityArray = []
@@ -78,7 +100,7 @@ def zeno_demo_main(numOperators = 4):
         numIter = factorPair[1]
         for i in range(numIter): # Repeat for all the iterations needed
             print(f">>> # Operators: {numOperators}, # Iterations: {numIter}, Current Iteration: {i + 1}")
-            s1, circuit, probabilityArray, p = process_circuit(numOpPerStage=numOpPerStage, noisy=simulator)
+            s1, circuit, probabilityArray, p = process_circuit(numOpPerStage=numOpPerStage, noisy=True)
 
             # numZero = list(s1.values())[list(s1.keys()).index('0')] # Find the occurence of 0
             # p = numZero/4096
@@ -113,7 +135,7 @@ def zeno_demo_main(numOperators = 4):
 
     # Save the figure
     backend = "simulator" if simulator else "QC"
-    plt.savefig(f"resource_folder/zeno_probability_plot_numOp{numOperators}_{backend}.png", dpi=300, bbox_inches='tight')
+    plt.savefig(f"resource_folder/zeno_probability_plot.png", dpi=1024, bbox_inches='tight')
 
     # Optional: display the plot
     # plt.show()
