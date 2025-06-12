@@ -63,3 +63,5 @@ def quantum_factor_game():
 
     if not found:
         print("\n🚫 Game over. Neither you nor the quantum computer found a factor.")
+
+quantum_factor_game()
