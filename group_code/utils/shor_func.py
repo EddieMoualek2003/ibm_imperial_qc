@@ -114,12 +114,31 @@ def find_factors(frequency, n_count, N, a):
         return 0
 
 def shor_func(N, a):
+    print("Running the function")
     m_target = ceil(log2(N))
     n_count = 2 * m_target
+    print("parameters computed")
     qc = create_shor_qpe_circuit(n_count, m_target, a, N)
+    print("circuit created")
     counts = measure(qc)
+    print("Measuring")
     frequency = result_clean_convert(counts)
+    print("Cleaning.")
     factor = find_factors(frequency, n_count, N, a)
     return factor, frequency
 
+from math import gcd
 
+def shor_func_mod(N, a):
+    if gcd(a, N) != 1:
+        print(f"⚠️ Skipping a = {a}, not coprime with N = {N}")
+        factor = "ncp"
+        frequency = None
+    else:
+        m_target = ceil(log2(N))
+        n_count = 2 * m_target
+        qc = create_shor_qpe_circuit(n_count, m_target, a, N)
+        counts = measure(qc)
+        frequency = result_clean_convert(counts)
+        factor = find_factors(frequency, n_count, N, a)
+    return factor, frequency
