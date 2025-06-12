@@ -267,4 +267,4 @@ def run_quantum_match():
                     state = PLAY_MODE
 
     pygame.quit()
-# run_quantum_match()
+run_quantum_match()
