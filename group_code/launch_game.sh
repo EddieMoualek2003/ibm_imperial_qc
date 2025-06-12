@@ -32,7 +32,7 @@ while true; do
     2) run_game "entanglement_game.py" ;;
     3) run_game "deugame.py" ;;
     4) run_game "funcentaglegame.py" ;;
-    5) run_game "quantum_factor_top.py" ;;
+    5) run_game "quantum_factor_gui.py" ;;
     6) echo "Goodbye!"; exit 0 ;;
     *) echo "? Invalid choice. Please try again." ;;
   esac
