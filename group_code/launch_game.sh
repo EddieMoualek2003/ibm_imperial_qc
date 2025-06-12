@@ -21,8 +21,9 @@ while true; do
   echo "2. Entanglement Game (entanglement_game.py)"
   echo "3. Deu Game (deugame.py)"
   echo "4. Functional Entanglement Game (funcentaglegame.py)"
-  echo "5. Quantum Factor Game (quantum_factor_top.py)"
-  echo "6. Exit"
+  echo "5. Quantum Factor Game (quantum_factor_gui.py)"
+  echo "6. Quantum Zeno Game (zeno_gui.py)"
+  echo ". Exit"
   echo ""
 
   read -p "Select a game [1-6]: " choice
@@ -33,7 +34,8 @@ while true; do
     3) run_game "deugame.py" ;;
     4) run_game "funcentaglegame.py" ;;
     5) run_game "quantum_factor_gui.py" ;;
-    6) echo "Goodbye!"; exit 0 ;;
+    6) run_game "zeno_gui.py" ;;
+    10) echo "Goodbye!"; exit 0 ;;
     *) echo "? Invalid choice. Please try again." ;;
   esac
 done
