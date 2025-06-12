@@ -14,4 +14,5 @@ haha quantum go brrr
         - An important note is the dependency of this function on the core functions for Shor's algorithm.
         - This makes the function file somewhat quite long, but allows elegant access to it from the two games that make use of it.
 
-### 
+### Movement of Games
+ - In preparation for writing the shell script that will be used to control everything, the recommended folder structure was to have a folder of the games, and a folder for the utils. The rest of the games will be added in the next couple of days.

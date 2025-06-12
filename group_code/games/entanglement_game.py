@@ -50,7 +50,7 @@ for i in range(rounds):
     qc.measure([0, 1], [0, 1])
 
     # Simulate
-    counts = noisy_simulator(qc)
+    counts = noisy_simulator(qc)[0]
     outcome = list(counts.keys())[0] 
     qubit_b, qubit_a = outcome[0], outcome[1]
 
