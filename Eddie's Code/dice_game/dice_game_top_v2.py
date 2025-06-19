@@ -3,8 +3,11 @@
 import argparse
 from dice_game.dice_game_functions import *
 from utils.ibm_qc_interface import *
+from time import sleep
 
 # Output fallback handlers
+
+
 
 def display_on_leds(selected):
     try:
@@ -17,15 +20,31 @@ def display_on_leds(selected):
     return True
 
 def display_on_emulator(selected):
+    print("[INFO] Attempting Sense HAT emulator output...")
     try:
-        print("[INFO] Attempting Sense HAT emulator output...")
-        # Emulator code here
-        print("Would normally go here")
-        # raise NotImplementedError("SenseHAT emulator not working.")
+        from sense_emu import SenseHat
+        sense = SenseHat()
+        sense.clear()
+        # Define colors
+        BLUE = (0, 0, 255)
+        RED = (255, 0, 0)
+        BLACK = (0, 0, 0)
+
+        # LED matrix is 8x8. We'll center the 3-bit display on row 3 (zero-indexed)
+        row = 3
+        start_col = 2  # columns 2, 3, 4 for 3 bits
+
+        for i, bit in enumerate(selected):
+            color = BLUE if bit else RED
+            sense.set_pixel(start_col + i, row, color)
+        
+        # Let it stay visible for a few seconds
+        sleep(3)
+        sense.clear()
+        raise NotImplementedError("SenseHAT emulator not working.")
     except Exception as e:
         print(f"[WARNING] Emulator display failed: {e}")
         return False
-    return True
 
 def display_cli(selected):
     print(f"[CLI OUTPUT] Quantum Dice Result: {selected}")
@@ -47,7 +66,7 @@ def dice_game_main(display_mode=None):
             if not display_on_emulator(selected):
                 display_cli(selected)
     elif display_mode == "emulator":
-        if not display_on_emulator(selected):
+        if not display_on_emulator(list(str(selected))):
             display_cli(selected)
     else:
         display_cli(selected)
