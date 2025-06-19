@@ -20,7 +20,8 @@ def display_on_emulator(selected):
     try:
         print("[INFO] Attempting Sense HAT emulator output...")
         # Emulator code here
-        raise NotImplementedError("SenseHAT emulator not working.")
+        print("Would normally go here")
+        # raise NotImplementedError("SenseHAT emulator not working.")
     except Exception as e:
         print(f"[WARNING] Emulator display failed: {e}")
         return False
