@@ -21,6 +21,7 @@ def display_on_leds(selected):
 
 def display_on_emulator(selected):
     print("[INFO] Attempting Sense HAT emulator output...")
+    print(selected)
     try:
         from sense_emu import SenseHat
         sense = SenseHat()
@@ -35,6 +36,7 @@ def display_on_emulator(selected):
         start_col = 2  # columns 2, 3, 4 for 3 bits
 
         for i, bit in enumerate(selected):
+            bit = int(bit)
             color = BLUE if bit else RED
             sense.set_pixel(start_col + i, row, color)
         
