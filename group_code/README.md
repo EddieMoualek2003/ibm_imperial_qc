@@ -14,5 +14,12 @@ haha quantum go brrr
         - An important note is the dependency of this function on the core functions for Shor's algorithm.
         - This makes the function file somewhat quite long, but allows elegant access to it from the two games that make use of it.
 
+    - The most recent update moves core game functionality to this folder, and the respective games call the required engines for computation.
+        - This allows for a more logical workflow if adding games:
+            - Create top level GUI.
+            - Store the games mechanics in the `utils` folder.
+            - Create the link between the two.
+            - Add this to the `launch_game.sh` folder for it to be executed.
+
 ### Movement of Games
  - In preparation for writing the shell script that will be used to control everything, the recommended folder structure was to have a folder of the games, and a folder for the utils. The rest of the games will be added in the next couple of days.
